@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="product_template_inherit_form_view_api">
+        <field name="name">product.template.form.form.view.inherit.api</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <field name="type" position="after">
+                <field name="h_id"/>
+            </field>
+        </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="pos_category_inherit_form_view_api">
+        <field name="name">pos.category.form.form.view.inherit.api</field>
+        <field name="model">pos.category</field>
+        <field name="inherit_id" ref="point_of_sale.product_pos_category_form_view"/>
+        <field name="arch" type="xml">
+            <field name="parent_id" position="after">
+                <field name="h_id"/>
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="res_partner_inherit_form_view_api">
+        <field name="name">res.partner.form.form.view.inherit.api</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="vat" position="after">
+                <field name="h_id"/>
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="sale_order_inherit_form_view_api">
+        <field name="name">sale.order.form.form.view.inherit.api</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="h_id"/>
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="account_move_inherit_form_view_api">
+        <field name="name">account.move.form.view.inherit.api</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <field name="invoice_date" position="after">
+                <field name="h_id"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="ir_cron_update_price_from_bom" model="ir.cron">
+        <field name="name">Price Update From BOM</field>
+        <field name="interval_number">30</field>
+        <field name="interval_type">minutes</field>
+        <field name="model_id" ref="product.model_product_template"/>
+        <field name="state">code</field>
+        <field name="code">model._update_price_from_bom()</field>
+    </record>
+</odoo>
