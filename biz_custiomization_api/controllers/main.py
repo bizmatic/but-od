@@ -65,7 +65,7 @@ class APICalls(http.Controller):
                                 # Create a new analytic account if not found
                                 default_plan = request.env['account.analytic.plan'].sudo().create({'name': 'Default Plan'})
                                 analytic_account = request.env['account.analytic.account'].sudo().create({
-                                    'name': analytic_account_name,
+                                    'name': 'analytic_account_name',
                                     'plan_id': default_plan.id
                                 })
                             analytic_distribution_dict[analytic_account.id] = 100
@@ -81,7 +81,7 @@ class APICalls(http.Controller):
                     parameters['order_line'] = processed_sale_lines
                     # Create the sale
                     if parameters.get('id', False):
-                        parameters['h_id'] = parameters['id']
+                        parameters['h_id'] = parameters['h_id']
                         del parameters['id']
                     del parameters['payment_method']
                     sale = request.env['sale.order'].with_user(2).create(parameters)
@@ -683,12 +683,12 @@ class APICalls(http.Controller):
                 user_id = request.env["res.users.apikeys"]._check_credentials(scope='rpc', key=api_key)
                 if user_id:
                     data = json.loads(request.httprequest.data)
-                    required_fields = ['date', 'order_id']
+                    required_fields = ['date', 'h_id']
                     customer_data = json.loads(request.httprequest.data)
                     missing_fields = [field for field in required_fields if not customer_data.get(field)]
                     if missing_fields:
                         return {'status': 'error', 'message': f'Missing required fields: {", ".join(missing_fields)}'}
-                    invoice = request.env['account.move'].sudo().search([('h_id', '=', data['order_id']), ('move_type', '=', 'out_invoice')], limit=1)
+                    invoice = request.env['account.move'].sudo().search([('h_id', '=', data['h_id']), ('move_type', '=', 'out_invoice')], limit=1)
                     if not invoice:
                         return {'status': 'error', 'message': f"Invoice with H ID {data['order_id']} not found."}
                     credit_note_wizard = request.env['account.move.reversal'].sudo().create({
