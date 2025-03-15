@@ -724,6 +724,11 @@ class APICalls(http.Controller):
                                 for line_id in line_ids_remove:
                                     credit_note.write({'invoice_line_ids': [(3, line_id)]})
                         credit_note.action_post()
+                        # make payment
+                        wizard = request.env['account.payment.register'].with_context(active_model='account.move',active_ids=credit_note.ids).sudo().create({
+                            'payment_date': invoice.date,
+                        })
+                        payment = wizard.sudo()._create_payments()
                     dump = json.dumps({'status': 'success', 'credit_note_id': credit_note.id})
                     return json.loads(dump)
                 else:
